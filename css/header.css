@@ -1,0 +1,64 @@
+/* Header styling with navigation and search category */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  header h1 {
+    font-family: 'Georgia', serif;
+    font-size: 2em;
+  }
+  
+  header img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+  }
+  
+  /* Nav and search layout */
+  .nav-and-search {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  nav ul {
+    display: flex;
+    list-style: none;
+    gap: 15px;
+    margin: 0;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1em;
+    font-weight: bold;
+  }
+  
+  nav a:hover {
+    color: #007bff;
+  }
+  
+  nav a.active {
+    color: #007bff;
+  }
+  
+  .search-category {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto; /* Push it to the right */
+  }
+  
+  .search-category select, 
+  .search-category input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }

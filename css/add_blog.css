@@ -1,0 +1,27 @@
+.add-blog-form {
+    display: flex;
+    justify-content: center;
+}
+
+#image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+    border: 2px dashed #007bff;
+    border-radius: 10px;
+}
+
+#category {
+    justify-self: start;
+    padding: 8px;
+    margin-right: 10px;
+}
+
+#title {
+    padding: 8px;
+    margin-right: 10px;
+    width: 100%;
+}
