@@ -32,54 +32,20 @@
             <input type="text" placeholder="Search...">
         </div>
     </div>
+
+
     <div class="blog-grid">
         <a href="add_blog.php" class="blog-card add-post">
             <div class="add-icon">+</div>
         </a>
-
+        <!-- Example of a blog post -->
         <div class="blog-card">
-            <img src="images/image1.jpg" alt="Blog Image">
+            <img src="images/image1.jpg" alt="Traveling">
             <div class="content">
-                <h2>Blog title</h2>
+                <h2>Traveling</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                 <div class="meta">
-                    <span>October 12, 2024</span>
-                    <span>Travel</span>
-                </div>
-            </div>
-        </div>
-        <!-- Repeat similar cards -->
-        <div class="blog-card">
-            <img src="images/image2.jpg" alt="Blog Image">
-            <div class="content">
-                <h2>Blog title</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <div class="meta">
-                    <span>October 12, 2024</span>
-                    <span>Travel</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="blog-card">
-            <img src="images/image3.jpg" alt="Blog Image">
-            <div class="content">
-                <h2>Blog title</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <div class="meta">
-                    <span>October 12, 2024</span>
-                    <span>Travel</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="blog-card">
-            <img src="images/image4.jpg" alt="Blog Image">
-            <div class="content">
-                <h2>Blog title</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <div class="meta">
-                    <span>October 12, 2024</span>
+                    <span>October 29, 2023</span>
                     <span>Travel</span>
                 </div>
             </div>
