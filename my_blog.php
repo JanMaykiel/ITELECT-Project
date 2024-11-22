@@ -40,15 +40,17 @@
         </a>
         <!-- Example of a blog post -->
         <div class="blog-card">
-            <img src="images/image1.jpg" alt="Traveling">
-            <div class="content">
-                <h2>Traveling</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <div class="meta">
-                    <span>October 29, 2023</span>
-                    <span>Travel</span>
+            <a href="blog_details.php" class="blog-details">
+                <img src="images/image3.jpg" alt="Blog Image">
+                <div class="content">
+                    <h2>Traveling</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <div class="meta">
+                        <span>October 12, 2024</span>
+                        <span>Travel</span>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 </body>

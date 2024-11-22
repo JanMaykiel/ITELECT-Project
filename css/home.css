@@ -17,6 +17,11 @@
   flex-direction: column;
 }
 
+.blog-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
 /* Blog card image */
 .blog-card img {
   width: 100%;
