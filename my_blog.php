@@ -41,7 +41,7 @@
         <!-- Example of a blog post -->
         <div class="blog-card">
             <a href="blog_details.php" class="blog-details">
-                <img src="images/image3.jpg" alt="Blog Image">
+                <img src="images/image1.jpg" alt="Blog Image">
                 <div class="content">
                     <h2>Traveling</h2>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
