@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+include 'db.php';
+include 'functions.php';
+
+$user_data = check_login($conn);
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,14 +23,17 @@
 <body>
     <header>
         <h1>Daily Thoughts</h1>
-
-        <img src="images/profile.png" alt="Profile Picture">
+        <a href="profile.php">
+            <h4><?php echo $user_data['name']; ?></h4>
+            <img src="uploads/<?= $user_data['profile_path'] ?: 'uploads/default.png'; ?>">
+        </a>
     </header>
     <div class="nav-and-search">
         <nav>
             <ul>
                 <li><a href="index.php" class="active">Home</a></li>
                 <li><a href="my_blog.php">My Blog</a></li>
+                <li><a href="profile.php">Profile</a></li>
                 <li><a href="about_us.php">About Us</a></li>
             </ul>
         </nav>
