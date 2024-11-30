@@ -23,7 +23,7 @@ $user_data = check_login($conn);
     <header>
         <h1>Daily Thoughts</h1>
         <a href="profile.php">
-            <h4><?php echo $user_data['name']; ?></h4>
+            <h4><?php echo $user_data['firstname'] . ' ' . $user_data['lastname']; ?></h4>
             <img src="uploads/<?= $user_data['profile_path'] ?: 'uploads/default.png'; ?>">
         </a>
     </header>

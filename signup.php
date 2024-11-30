@@ -5,14 +5,15 @@ include 'db.php';
 include 'functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $_POST['name'];
+    $fname = $_POST['fname'];
+    $lname = $_POST['lname'];
     $email = $_POST['email'];
     $password = md5($_POST['password']); // Hash the password
     $confirm_password = md5($_POST['confirm_password']); // Hash confirm password
 
     $default_profile_pic = "uploads/default.png";
 
-    if (!empty($name) && !empty($email) && !empty($password) && !empty($confirm_password) && !is_numeric($name)) {
+    if (!empty($fname) && !empty($lname) && !empty($email) && !empty($password) && !empty($confirm_password) && !is_numeric($fname) && !is_numeric($lname)) {
         // All fields are filled save to database
         if ($password === $confirm_password) {
             // Check if the email already exists
@@ -25,8 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 die;
             } else {
                 // Insert the user into the database
-                $user_id = random_num(8);
-                $query = "INSERT INTO users (user_id, name, email, password, profile_path) VALUES ('$user_id', '$name', '$email', '$password', '$default_profile_pic')";
+                $user_id = random_num(20);
+                $query = "INSERT INTO users (user_id, firstname, lastname, email, password, profile_path) VALUES ('$user_id', '$fname', '$lname', '$email', '$password', '$default_profile_pic')";
 
                 mysqli_query($conn, $query);
                 header('Location: login.php?message=registered');
@@ -73,8 +74,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
             <form action="signup.php" method="POST">
                 <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required>
+                    <label for="fname">First Name</label>
+                    <input type="text" id="fname" name="fname" required>
+                </div>
+                <div class="form-group">
+                    <label for="lname">Last Name</label>
+                    <input type="text" id="lname" name="lname" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>

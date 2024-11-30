@@ -33,6 +33,8 @@ h1 {
     padding: 30px;
     color: #666;
     width: 75%;
+    height: 100px;
+    align-content: center;
     text-align: center;
     cursor: pointer;
 }

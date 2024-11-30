@@ -1,3 +1,7 @@
+* {
+  font-family: Arial, sans-serif;
+}
+
 /* Header styling with navigation and search category */
 header {
     display: flex;

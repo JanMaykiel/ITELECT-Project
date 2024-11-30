@@ -1,3 +1,74 @@
+<?php
+session_start();
+
+include 'db.php';
+include 'functions.php';
+
+$user_data = check_login($conn);
+
+//Get the user id
+$user_id = $_SESSION['user_id'];
+
+// Handle blog post
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $category = $_POST['category'];
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+
+    $post_id = random_num(20);
+
+    if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
+        $img_name = $_FILES['image']['name'];
+        $temp_name = $_FILES['image']['tmp_name'];
+        $img_size = $_FILES['image']['size'];
+        $error = $_FILES['image']['error'];
+
+        if ($error === 0) {
+            if ($img_size > 2 * 1024 * 1024) {
+                echo "File too large!";
+                header('Location: add_blog.php?error=file_too_large');
+                die;
+            } else {
+                $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+                $img_ex_to_lc = strtolower($img_ex);
+
+                $allowed_exs = array("jpg", "jpeg", "png");
+                if (in_array($img_ex_to_lc, $allowed_exs)) {
+                    if ($error === 0) {
+                        if ($img_size < 2 * 1024 * 1024) {
+                            $new_img_name = uniqid($post_id, true) . '.' . $img_ex_to_lc;
+                            $img_upload_path = 'uploads/posts/' . $new_img_name;
+                            move_uploaded_file($temp_name, $img_upload_path);
+                        } else {
+                            echo "File too large!";
+                        }
+                    } else {
+                        echo "There was an error uploading your file.";
+                    }
+                } else {
+                    echo "You can't upload files of this type.";
+                }
+            }
+        } else {
+            echo "There was an error uploading your file.";
+            header('Location: add_blog.php?error=upload_error');
+        }
+
+        // Update user details
+        $query = "INSERT INTO posts (post_id, user_id, category, post_title, post, image) VALUES ('$post_id', '$user_id', '$category', '$title', '$description', '$new_img_name')";
+        mysqli_query($conn, $query);
+        if (mysqli_query($conn, $update_query)) {
+            header('Location: add_blog.php?success=1');
+            die;
+        } else {
+            echo "Error updating profile.";
+        }
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,8 +83,10 @@
 <body>
     <header>
         <h1>Daily Thoughts</h1>
-
-        <img src="images/profile.png" alt="Profile Picture">
+        <a href="profile.php">
+            <h4><?php echo $user_data['firstname'] . ' ' . $user_data['lastname']; ?></h4>
+            <img src="uploads/<?= $user_data['profile_path'] ?: 'uploads/default.png'; ?>">
+        </a>
     </header>
     <div class="nav-and-search">
         <nav>
@@ -38,10 +111,9 @@
         <form action="add_blog.php" method="POST" enctype="multipart/form-data">
             <div class="upload-container">
                 <label for="image">
-                    <div class="upload-box">drag and drop images <br> or <button type="button"
-                            class="upload-button">Upload</button></div>
+                    <div class="upload-box">Upload an Image</div>
+                    <input type="file" id="image" name="image" accept="image/*" hidden required>
                 </label>
-                <input type="file" id="image" name="image" accept="image/*" hidden>
             </div>
             <div class="form-group">
                 <label for="category">Category:</label>

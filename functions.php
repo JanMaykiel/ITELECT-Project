@@ -10,15 +10,23 @@ function check_login($con)
             $user_data = mysqli_fetch_assoc($result);
             return $user_data;
         }
+
+        //Redirect to home page with login
+        header("Location: index.php");
+        die;
+    } else {
+        //Redirect to home page without login
+        header("Location: home.php");
+        die;
     }
-    //Redirect to login
-    header("Location: login.php");
-    die;
 }
 
 function random_num($length)
 {
     $text = "";
+    if ($length < 5) {
+        $length = 5;
+    }
 
     for ($i = 0; $i < $length; $i++) {
         $text .= rand(0, 9);

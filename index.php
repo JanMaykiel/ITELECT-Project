@@ -5,7 +5,19 @@ include 'db.php';
 include 'functions.php';
 
 $user_data = check_login($conn);
+//check if user is logged in
+if ($user_data === false) {
+    header('Location: home.php');
+    die;
+}
 
+// Fetch post details
+$query = "SELECT * FROM posts ORDER BY id ASC";
+$result = mysqli_query($conn, $query);
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+}
 ?>
 
 
@@ -24,7 +36,9 @@ $user_data = check_login($conn);
     <header>
         <h1>Daily Thoughts</h1>
         <a href="profile.php">
-            <h4><?php echo $user_data['name']; ?></h4>
+            <h4>
+                <?php echo $user_data['firstname'] . ' ' . $user_data['lastname']; ?>
+            </h4>
             <img src="uploads/<?= $user_data['profile_path'] ?: 'uploads/default.png'; ?>">
         </a>
     </header>
@@ -38,28 +52,45 @@ $user_data = check_login($conn);
             </ul>
         </nav>
         <div class="search-category">
-            <select>
-                <option value="" selected disabled hidden>Categories</option>
-                <option>Travel</option>
-                <option>Lifestyle</option>
-            </select>
-            <input type="text" placeholder="Search...">
+            <form action="index.php" method="GET">
+                <select name="category" onchange="submit()">
+                    <option value="" selected disabled hidden>Categories</option>
+                    <option>All</option>
+                    <option>Travel</option>
+                    <option>Food</option>
+                    <option>Fitness</option>
+                </select>
+            </form>
+            <input type="text" name="search" placeholder="Search...">
         </div>
     </div>
     <div class="blog-grid">
-        <div class="blog-card">
-            <a href="blog_details.php" class="blog-details">
-                <img src="images/image1.jpg" alt="Blog Image">
-                <div class="content">
-                    <h2>Traveling</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    <div class="meta">
-                        <span>October 12, 2024</span>
-                        <span>Travel</span>
-                    </div>
-                </div>
-            </a>
-        </div>
+        <?php
+        if (isset($_GET['category'])) {
+            $category = $_GET['category'];
+            switch ($category) {
+                case 'Travel':
+                    $query = "SELECT * FROM posts WHERE category = 'Travel' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'Fitness':
+                    $query = "SELECT * FROM posts WHERE category = 'Fitness' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'Food':
+                    $query = "SELECT * FROM posts WHERE category = 'Food' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'All':
+                    $query = "SELECT * FROM posts ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+            }
+        }
+
+        foreach ($result as $user) {
+            include 'post.php';
+        }
+        ?>
         <!-- Repeat similar cards -->
 </body>
 

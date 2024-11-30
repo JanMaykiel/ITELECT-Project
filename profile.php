@@ -21,7 +21,8 @@ if ($result->num_rows > 0) {
 
 // Handle profile update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = htmlspecialchars($_POST['name']);
+    $fname = htmlspecialchars($_POST['fname']);
+    $lname = htmlspecialchars($_POST['lname']);
     $bio = htmlspecialchars($_POST['bio']);
 
     // Handle profile picture upload
@@ -44,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (in_array($img_ex_to_lc, $allowed_exs)) {
                     if ($error === 0) {
                         if ($img_size < 2 * 1024 * 1024) {
-                            $new_img_name = uniqid($name, true) . '.' . $img_ex_to_lc;
+                            $new_img_name = uniqid($fname, true) . '.' . $img_ex_to_lc;
                             $img_upload_path = 'uploads/' . $new_img_name;
                             move_uploaded_file($temp_name, $img_upload_path);
                         } else {
@@ -72,12 +73,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $update_query = "UPDATE users SET name = '$name', bio = '$bio' WHERE user_id = '$user_id'";
-    if (mysqli_query($conn, $update_query)) {
-        header('Location: profile.php?success=1');
-        die;
-    } else {
-        echo "Error updating profile.";
+    if (!empty($fname) && !empty($lname) && !empty($bio) && !is_numeric($fname) && !is_numeric($lname)) {
+        $update_query = "UPDATE users SET firstname = '$fname', lastname = '$lname', bio = '$bio' WHERE user_id = '$user_id'";
+        if (mysqli_query($conn, $update_query)) {
+            header('Location: profile.php?success=1');
+            die;
+        } else {
+            echo "Error updating profile.";
+        }
     }
 }
 ?>
@@ -97,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <header>
         <h1>Daily Thoughts</h1>
         <a href="profile.php">
-            <h4><?php echo $user['name']; ?></h4>
+            <h4><?php echo $user['firstname'] . ' ' . $user['lastname']; ?></h4>
             <img src="uploads/<?= $user['profile_path'] ?: 'uploads/default.png'; ?>">
         </a>
     </header>
@@ -119,24 +122,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <div class="profile-card">
-            <img src="uploads/<?= $user['profile_path'] ?: 'uploads/default.png'; ?>" class="profile-pic">
-            <h2><?php echo $user['name']; ?></h2>
-            <p><?php echo $user['email']; ?></p>
+            <div>
+                <img src="uploads/<?= $user['profile_path'] ?: 'uploads/default.png'; ?>" class="profile-pic">
+            </div>
+            <div>
+                <h2><?php echo $user['firstname'] . ' ' . $user['lastname']; ?></h2>
+                <p><?php echo $user['email']; ?></p>
+            </div>
         </div>
 
         <h2>Edit Profile</h2>
         <form action="profile.php" method="POST" enctype="multipart/form-data">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" value="<?php echo $user['name']; ?>" required>
+            <div class="form-group">
+                <label for="fname">First Name:</label>
+                <input type="text" id="fname" name="fname" value="<?php echo $user['firstname']; ?>" required>
+            </div>
 
-            <label for="bio">Bio:</label>
-            <textarea id="bio" name="bio"><?php echo $user['bio']; ?></textarea>
-
-            <label for="profile_pic">Profile Picture:</label>
-            <input type="file" id="profile_pic" name="profile_pic">
-
-            <button type="submit">Update Profile</button>
-            <a href="logout.php">Logout</a>
+            <div class="form-group">
+                <label for="lname">Last Name:</label>
+                <input type="text" id="lname" name="lname" value="<?php echo $user['lastname']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="bio">Bio:</label>
+                <textarea id="bio" name="bio"><?php echo $user['bio']; ?></textarea>
+            </div>
+            <div class="form-group">
+                <label for="profile_pic">Profile Picture:</label>
+                <input type="file" id="profile_pic" name="profile_pic">
+            </div>
+            <div class="button-group">
+                <button type="submit" class="update">Update Profile</button>
+                <a href="logout.php" class="logout">Logout</a>
+            </div>
         </form>
     </div>
 </body>
