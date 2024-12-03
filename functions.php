@@ -14,10 +14,6 @@ function check_login($con)
         //Redirect to home page with login
         header("Location: index.php");
         die;
-    } else {
-        //Redirect to home page without login
-        header("Location: home.php");
-        die;
     }
 }
 

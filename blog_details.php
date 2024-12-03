@@ -1,3 +1,56 @@
+<?php
+session_start();
+
+include 'db.php';
+include 'functions.php';
+
+$user = check_login($conn);
+//if the user is not loggen in redirect to login page
+if (!$user) {
+    header('Location: login.php?=not_logged_in');
+    die;
+}
+
+
+// Get the post ID from the URL
+if (isset($_GET['id'])) {
+    $postId = intval($_GET['id']); // Sanitize the input
+    $query = "SELECT * FROM posts WHERE post_id = '$postId'";
+    $result = mysqli_query($conn, $query);
+
+    if ($result->num_rows > 0) {
+        $post = $result->fetch_assoc();
+    } else {
+        echo $postId;
+        echo "Post not found!";
+        exit;
+    }
+} else {
+    echo "Invalid post ID!";
+    exit;
+}
+
+$user_id = $post['user_id'];
+$query = "SELECT * FROM users WHERE user_id = '$user_id'";
+$result = mysqli_query($conn, $query);
+
+if ($result->num_rows > 0) {
+    $user_data = $result->fetch_assoc();
+} else {
+    echo "User not found!";
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $comment = $_POST['comment'];
+    $query = "INSERT INTO comments (post_id, user_id, comment) VALUES ('$postId', '$user_id', '$comment')";
+    if (mysqli_query($conn, $query)) {
+        $query = "UPDATE posts SET comments = comments + 1 WHERE post_id = '$postId'";
+        mysqli_query($conn, $query);
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,8 +65,12 @@
 <body>
     <header>
         <h1>Daily Thoughts</h1>
-
-        <img src="images/profile.png" alt="Profile Picture">
+        <a href="profile.php">
+            <h4>
+                <?php echo $user['firstname'] . ' ' . $user['lastname']; ?>
+            </h4>
+            <img src="uploads/<?= $user['profile_path'] ?: 'uploads/default.png'; ?>">
+        </a>
     </header>
     <div class="nav-and-search">
         <nav>
@@ -27,39 +84,38 @@
 
     <!-- Post Container -->
     <div class="post-container">
-        <div class="post-title">Traveling</div>
+        <div class="post-title"><?= $post['post_title'] ?></div>
         <!-- Post Header -->
         <div class="post-header">
             <img src="images/profile.png" alt="User Profile">
             <div class="author-info">
-                <h3>@myusername.mail</h3>
+                <h3><?= $user_data['firstname'] . " " . $user_data['lastname'] ?></h3>
                 <span>6 hr. ago</span>
             </div>
 
-            <div class="post-category">Travel</div>
+            <div class="post-category"><?= $post['category'] ?></div>
         </div>
 
         <!-- Post Image -->
-        <img class="post-image" src="images/image1.jpg" alt="Post Image">
+        <img class="post-image" src='uploads/posts/<?= $post['image'] ?>' alt="Post Image">
 
         <!-- Post Content -->
         <div class="post-content">
-            <p>Lorem ipsum dolor amet, consectetuer adipiscing elit. Faucibus blandit fames non efficitur vestibulum.
-            </p>
+            <p><?= $post['post'] ?></p>
         </div>
 
         <!-- Post Actions -->
         <div class="post-actions">
-            <button><span>❤️</span> 1.1k</button>
-            <button><span>💬</span> 212</button>
-            <button><span>🔗</span> Share</button>
-            <button class="menu-button">⋮</button>
+            <a href="like.php?id=<?= $post['post_id'] ?>" <button name="like"><span>❤️</span>
+                <?= $post['likes'] ?></button></a>
+            <span><span>💬</span> <?= $post['comments'] ?></span>
         </div>
 
         <!-- Comments Section -->
         <div class="comments-section">
             <h3>Comments:</h3>
-            <textarea placeholder="Leave a comment..."></textarea>
+            <textarea name="comment" placeholder="Leave a comment..."></textarea>
+            <button type="submit">Post Comment</button>
         </div>
     </div>
 </body>

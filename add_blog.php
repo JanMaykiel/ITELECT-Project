@@ -16,13 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'];
     $description = $_POST['description'];
 
-    $post_id = random_num(20);
-
     if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
         $img_name = $_FILES['image']['name'];
         $temp_name = $_FILES['image']['tmp_name'];
         $img_size = $_FILES['image']['size'];
         $error = $_FILES['image']['error'];
+        $post_id = random_num(10);
 
         if ($error === 0) {
             if ($img_size > 2 * 1024 * 1024) {
@@ -40,29 +39,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $new_img_name = uniqid($post_id, true) . '.' . $img_ex_to_lc;
                             $img_upload_path = 'uploads/posts/' . $new_img_name;
                             move_uploaded_file($temp_name, $img_upload_path);
+                            $query = "INSERT INTO posts (post_id, user_id, category, post_title, post, image) VALUES ('$post_id', '$user_id', '$category', '$title', '$description', '$new_img_name')";
+                            if (mysqli_query($conn, $query)) {
+                                header('Location: add_blog.php?success=1');
+                                die;
+                            } else {
+                                header('Location: add_blog.php?error=error_uploading');
+                                die;
+                            }
                         } else {
-                            echo "File too large!";
+                            header('Location: add_blog.php?error=file_too_large');
+                            die;
                         }
                     } else {
-                        echo "There was an error uploading your file.";
+                        header('Location: add_blog.php?error=error_uploading');
+                        die;
                     }
                 } else {
-                    echo "You can't upload files of this type.";
+                    header('Location: add_blog.php?error=invalid_file_type');
+                    die;
                 }
             }
         } else {
             echo "There was an error uploading your file.";
             header('Location: add_blog.php?error=upload_error');
-        }
-
-        // Update user details
-        $query = "INSERT INTO posts (post_id, user_id, category, post_title, post, image) VALUES ('$post_id', '$user_id', '$category', '$title', '$description', '$new_img_name')";
-        mysqli_query($conn, $query);
-        if (mysqli_query($conn, $update_query)) {
-            header('Location: add_blog.php?success=1');
-            die;
-        } else {
-            echo "Error updating profile.";
         }
     }
 }
@@ -108,6 +108,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="container">
         <h1>Create new blog:</h1>
+        <?php if (isset($_GET['error'])): ?>
+            <p class="error-message">
+                <?php
+                if ($_GET['error'] === 'file_too_large')
+                    echo "Your file is too large.";
+                if ($_GET['error'] === 'error_uploading')
+                    echo "Error in uploading.";
+                if ($_GET['error'] === 'invalid_file_type')
+                    echo "Invalid file type.";
+                ?>
+            </p>
+        <?php endif; ?>
         <form action="add_blog.php" method="POST" enctype="multipart/form-data">
             <div class="upload-container">
                 <label for="image">

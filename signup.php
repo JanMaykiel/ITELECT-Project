@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 die;
             } else {
                 // Insert the user into the database
-                $user_id = random_num(20);
+                $user_id = random_num(10);
                 $query = "INSERT INTO users (user_id, firstname, lastname, email, password, profile_path) VALUES ('$user_id', '$fname', '$lname', '$email', '$password', '$default_profile_pic')";
 
                 mysqli_query($conn, $query);

@@ -6,8 +6,8 @@ include 'functions.php';
 
 $user_data = check_login($conn);
 //check if user is logged in
-if ($user_data === false) {
-    header('Location: home.php');
+if (!$user_data) {
+    header('Location: home.php?=not_logged_in');
     die;
 }
 

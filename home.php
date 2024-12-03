@@ -39,17 +39,40 @@ if ($result->num_rows > 0) {
             </ul>
         </nav>
         <div class="search-category">
-            <select>
-                <option value="" selected disabled hidden>Categories</option>
-                <option>Travel</option>
-                <option>Lifestyle</option>
-            </select>
-            <input type="text" placeholder="Search...">
+            <form action="home.php" method="GET">
+                <select name="category" onchange="submit()">
+                    <option value="" selected disabled hidden>Categories</option>
+                    <option>All</option>
+                    <option>Travel</option>
+                    <option>Food</option>
+                    <option>Fitness</option>
+                </select>
+            </form>
+            <input type="text" name="search" placeholder="Search...">
         </div>
     </div>
     <div class="blog-grid">
-        <!-- Example of a blog post -->
         <?php
+        if (isset($_GET['category'])) {
+            $category = $_GET['category'];
+            switch ($category) {
+                case 'Travel':
+                    $query = "SELECT * FROM posts WHERE category = 'Travel' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'Fitness':
+                    $query = "SELECT * FROM posts WHERE category = 'Fitness' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'Food':
+                    $query = "SELECT * FROM posts WHERE category = 'Food' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'All':
+                    $query = "SELECT * FROM posts ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+            }
+        }
         foreach ($result as $user) {
             include 'post.php';
         }
