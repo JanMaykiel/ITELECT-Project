@@ -47,21 +47,46 @@ if ($result->num_rows > 0) {
             </ul>
         </nav>
         <div class="search-category">
-            <select>
-                <option value="" selected disabled hidden>Categories</option>
-                <option>Travel</option>
-                <option>Lifestyle</option>
-            </select>
-            <input type="text" placeholder="Search...">
+            <form action="my_blog.php" method="GET">
+                <select name="category" onchange="submit()">
+                    <option value="" selected disabled hidden>Categories</option>
+                    <option>All</option>
+                    <option>Travel</option>
+                    <option>Food</option>
+                    <option>Fitness</option>
+                </select>
+            </form>
         </div>
     </div>
 
 
     <div class="blog-grid">
+        <?php
+        if (isset($_GET['category'])) {
+            $category = $_GET['category'];
+            switch ($category) {
+                case 'Travel':
+                    $query = "SELECT * FROM posts WHERE category = 'Travel' AND user_id = '$user_id' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'Fitness':
+                    $query = "SELECT * FROM posts WHERE category = 'Fitness' AND user_id = '$user_id' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'Food':
+                    $query = "SELECT * FROM posts WHERE category = 'Food' AND user_id = '$user_id' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'All':
+                    $query = "SELECT * FROM posts WHERE user_id = '$user_id' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+            }
+        }
+        ?>
         <a href="add_blog.php" class="blog-card add-post">
             <div class="add-icon">+</div>
         </a>
-        <!-- Example of a blog post -->
+
         <?php
         foreach ($result as $user) {
             include 'user_post.php';

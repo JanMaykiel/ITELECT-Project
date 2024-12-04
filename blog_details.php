@@ -49,6 +49,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_query($conn, $query);
     }
 }
+
+// Fetch comments for the post
+$query = "SELECT comments.comment, comments.created_at, users.firstname, users.lastname, users.profile_path
+          FROM comments
+          JOIN users ON comments.user_id = users.user_id
+          WHERE comments.post_id = ?
+          ORDER BY comments.created_at DESC";
+
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $postId);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -60,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Daily Thoughts</title>
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/blog_details.css">
+    <link rel="stylesheet" href="css/comments.css">
 </head>
 
 <body>
@@ -112,10 +125,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <!-- Comments Section -->
-        <div class="comments-section">
-            <h3>Comments:</h3>
-            <textarea name="comment" placeholder="Leave a comment..."></textarea>
-            <button type="submit">Post Comment</button>
+        <form action="add_comment.php?id=<?= $post['post_id'] ?>" method="POST">
+            <div class="comments-section">
+                <h3>Comments:</h3>
+                <textarea name="comment" placeholder="Leave a comment..."></textarea>
+                <button type="submit">Post Comment</button>
+            </div>
+        </form>
+
+        <div class="comments-block">
+            <?php
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    include 'comments.php';
+                }
+            } else {
+                echo "<p>No comments yet. Be the first to comment!</p>";
+            }
+            ?>
         </div>
     </div>
 </body>

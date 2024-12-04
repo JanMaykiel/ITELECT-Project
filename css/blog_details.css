@@ -33,6 +33,7 @@
     height: 50px;
     border-radius: 50%;
     margin-right: 15px;
+    object-fit: cover;
 }
 
 .post-header .author-info {
@@ -102,7 +103,6 @@
 /* Comments Section */
 .comments-section {
     padding: 20px;
-    margin-right: 20px;
     background-color: #f9f9f9;
     border-top: 1px solid #ddd;
 }
@@ -114,7 +114,7 @@
 }
 
 .comments-section textarea {
-    width: 100%;
+    width: 98%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;

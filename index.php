@@ -61,7 +61,9 @@ if ($result->num_rows > 0) {
                     <option>Fitness</option>
                 </select>
             </form>
-            <input type="text" name="search" placeholder="Search...">
+            <form action="index.php" method="GET">
+                <input type="text" name="search" placeholder="Search...">
+            </form>
         </div>
     </div>
     <div class="blog-grid">
@@ -85,6 +87,12 @@ if ($result->num_rows > 0) {
                     $query = "SELECT * FROM posts ORDER BY id ASC";
                     $result = mysqli_query($conn, $query);
             }
+        }
+
+        if (isset($_GET['search'])) {
+            $search = addslashes($_GET['search']);
+            $query = "SELECT * FROM posts WHERE post_title LIKE '%$search%' OR post LIKE '%$search%' ORDER BY id ASC";
+            $result = mysqli_query($conn, $query);
         }
 
         foreach ($result as $user) {
