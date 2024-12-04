@@ -1,28 +1,46 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['blog_id'])) {
-    $blog_id = intval($_POST['blog_id']);
+include 'db.php';
+include 'functions.php';
 
-    // Database connection
-    $conn = new mysqli('localhost', 'username', 'password', 'database');
+$user_data = check_login($conn);
 
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+//Get the user id
+$user_id = $_SESSION['user_id'];
 
-    // Delete query
-    $sql = "DELETE FROM blogs WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $blog_id);
+// Get the post ID from the URL
+if (isset($_GET['id'])) {
+    $postId = intval($_GET['id']); // Sanitize the input
+    $query = "SELECT * FROM posts WHERE post_id = '$postId'";
+    $result = mysqli_query($conn, $query);
 
-    if ($stmt->execute()) {
-        echo "Blog post deleted successfully.";
-        header("Location: my_blog.php"); // Redirect back to the My Blog page
+    if ($result->num_rows > 0) {
+        $post = $result->fetch_assoc();
     } else {
-        echo "Error deleting blog post: " . $conn->error;
+        echo $postId;
+        echo "Post not found!";
+        exit;
     }
+} else {
+    echo "Invalid post ID!";
+    exit;
+}
 
-    $stmt->close();
-    $conn->close();
+$old_img = $post['image'];
+if ($old_img !== 'default.png' && file_exists('uploads/posts/' . $old_img)) {
+    unlink('uploads/posts/' . $old_img);
+}
+// delete the post form database
+$query = "DELETE FROM posts WHERE post_id = '$postId' LIMIT 1";
+if (mysqli_query($conn, $query)) {
+    $query = "DELETE FROM likes WHERE post_id = '$postId' LIMIT 1";
+    if (mysqli_query($conn, $query)) {
+        header('Location: my_blog.php?success=1');
+    } else {
+        header('Location: my_blog.php?error=error_deleting');
+        die;
+    }
+} else {
+    header('Location: my_blog.php?error=error_deleting');
+    die;
 }
 ?>

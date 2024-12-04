@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="post-title"><?= $post['post_title'] ?></div>
         <!-- Post Header -->
         <div class="post-header">
-            <img src="images/profile.png" alt="User Profile">
+            <img src="uploads/<?= $user_data['profile_path'] ?>" alt="User Profile">
             <div class="author-info">
                 <h3><?= $user_data['firstname'] . " " . $user_data['lastname'] ?></h3>
                 <span>6 hr. ago</span>

@@ -26,6 +26,7 @@ if ($result->num_rows > 0) {
     <title>Daily Thoughts</title>
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/my_blog.css">
+    <link rel="stylesheet" href="css/delete.css">
 </head>
 
 <body>
@@ -63,7 +64,7 @@ if ($result->num_rows > 0) {
         <!-- Example of a blog post -->
         <?php
         foreach ($result as $user) {
-            include 'post.php';
+            include 'user_post.php';
         }
         ?>
     </div>

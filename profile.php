@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fname = htmlspecialchars($_POST['fname']);
     $lname = htmlspecialchars($_POST['lname']);
     $bio = htmlspecialchars($_POST['bio']);
+    $old_img = $user['profile_path'];
 
     // Handle profile picture upload
     if (isset($_FILES['profile_pic']['name']) && !empty($_FILES['profile_pic']['name'])) {
@@ -65,6 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Update user details
         $update_query = "UPDATE users SET profile_path = '$new_img_name' WHERE user_id = '$user_id'";
+        if ($old_img !== 'default.png' && file_exists('uploads/' . $old_img)) {
+            unlink('uploads/' . $old_img);
+        }
         if (mysqli_query($conn, $update_query)) {
             header('Location: profile.php?success=1');
             die;

@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             move_uploaded_file($temp_name, $img_upload_path);
                             $query = "INSERT INTO posts (post_id, user_id, category, post_title, post, image) VALUES ('$post_id', '$user_id', '$category', '$title', '$description', '$new_img_name')";
                             if (mysqli_query($conn, $query)) {
-                                header('Location: add_blog.php?success=1');
+                                header('Location: my_blog.php?success=1');
                                 die;
                             } else {
                                 header('Location: add_blog.php?error=error_uploading');
