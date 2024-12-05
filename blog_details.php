@@ -35,7 +35,7 @@ $query = "SELECT * FROM users WHERE user_id = '$user_id'";
 $result = mysqli_query($conn, $query);
 
 if ($result->num_rows > 0) {
-    $user_data = $result->fetch_assoc();
+    $user_post = $result->fetch_assoc();
 } else {
     echo "User not found!";
     exit;
@@ -90,7 +90,7 @@ $result = $stmt->get_result();
             <ul>
                 <li><a href="index.php">Home</a></li>
                 <li><a href="my_blog.php">My Blog</a></li>
-                <li><a href="about_us.php">About Us</a></li>
+                <li><a href="profile.php">Profile</a></li>
             </ul>
         </nav>
     </div>
@@ -100,12 +100,13 @@ $result = $stmt->get_result();
         <div class="post-title"><?= $post['post_title'] ?></div>
         <!-- Post Header -->
         <div class="post-header">
-            <img src="uploads/<?= $user_data['profile_path'] ?>" alt="User Profile">
-            <div class="author-info">
-                <h3><?= $user_data['firstname'] . " " . $user_data['lastname'] ?></h3>
-                <span>6 hr. ago</span>
-            </div>
-
+            <a class="info" href="view_profile.php?id=<?= $user_post['user_id'] ?>">
+                <img src="uploads/<?= $user_post['profile_path'] ?>" alt="User Profile">
+                <div class="author-info">
+                    <h3><?= $user_post['firstname'] . " " . $user_post['lastname'] ?></h3>
+                    <span>6 hr. ago</span>
+                </div>
+            </a>
             <div class="post-category"><?= $post['category'] ?></div>
         </div>
 

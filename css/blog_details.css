@@ -28,6 +28,11 @@
     border-bottom: 1px solid #ddd;
 }
 
+.info {
+    display: flex;
+    flex: 1;
+}
+
 .post-header img {
     width: 50px;
     height: 50px;
@@ -46,7 +51,7 @@
     font-weight: bold;
 }
 
-.post-header .author-info span {
+.post-header span {
     font-size: 12px;
     color: #888;
 }

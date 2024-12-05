@@ -35,6 +35,7 @@ if ($result->num_rows > 0) {
 <body>
     <header>
         <h1>Daily Thoughts</h1>
+
         <a href="profile.php">
             <h4>
                 <?php echo $user_data['firstname'] . ' ' . $user_data['lastname']; ?>
@@ -48,7 +49,6 @@ if ($result->num_rows > 0) {
                 <li><a href="index.php" class="active">Home</a></li>
                 <li><a href="my_blog.php">My Blog</a></li>
                 <li><a href="profile.php">Profile</a></li>
-                <li><a href="about_us.php">About Us</a></li>
             </ul>
         </nav>
         <div class="search-category">

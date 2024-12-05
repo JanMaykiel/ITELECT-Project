@@ -114,7 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <li><a href="index.php">Home</a></li>
                 <li><a href="my_blog.php">My Blog</a></li>
                 <li><a href="profile.php" class="active">Profile</a></li>
-                <li><a href="about_us.php">About Us</a></li>
             </ul>
         </nav>
     </div>
@@ -148,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="form-group">
                 <label for="bio">Bio:</label>
-                <textarea id="bio" name="bio"><?php echo $user['bio']; ?></textarea>
+                <textarea id="bio" name="bio" required><?php echo $user['bio']; ?></textarea>
             </div>
             <div class="form-group">
                 <label for="profile_pic">Profile Picture:</label>

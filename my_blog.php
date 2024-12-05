@@ -43,7 +43,6 @@ if ($result->num_rows > 0) {
                 <li><a href="index.php">Home</a></li>
                 <li><a href="my_blog.php" class="active">My Blog</a></li>
                 <li><a href="profile.php">Profile</a></li>
-                <li><a href="about_us.php">About Us</a></li>
             </ul>
         </nav>
         <div class="search-category">

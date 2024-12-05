@@ -11,10 +11,11 @@ header {
     background-color: white;
     padding: 10px 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
   }
   
   header h1 {
-    font-family: Arial, sans-serif;
+    font-family: 'Lucida Handwriting', cursive;
     font-size: 2em;
     flex: 1;
   }
