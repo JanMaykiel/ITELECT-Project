@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "DailyThoughtsDB";
+$database = "dailythoughtsdb";
 
 // Create a connection
 $conn = new mysqli($servername, $username, $password, $database);

@@ -1,0 +1,106 @@
+<?php
+session_start();
+
+include 'db.php';
+include 'functions.php';
+
+$user_data = check_login($conn);
+//check if user is logged in
+if (!$user_data) {
+    header('Location: home.php?=not_logged_in');
+    die;
+}
+
+// Fetch post details
+$query = "SELECT * FROM posts ORDER BY id ASC";
+$result = mysqli_query($conn, $query);
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Thoughts</title>
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/home.css">
+</head>
+
+<body>
+    <header>
+        <h1>Daily Thoughts</h1>
+
+        <a href="admin_profile.php">
+            <h4>
+                <?php echo $user_data['firstname'] . ' ' . $user_data['lastname']; ?>
+            </h4>
+            <img src="uploads/<?= $user_data['profile_path'] ?: 'uploads/default.png'; ?>">
+        </a>
+    </header>
+    <div class="nav-and-search">
+        <nav>
+            <ul>
+                <li><a href="admin_home.php" class="active">Posts</a></li>
+                <li><a href="admin_dashboard.php">Dashboard</a></li>
+                <li><a href="user_lists.php">User List</a></li>
+                <li><a href="admin_profile.php">Profile</a></li>
+            </ul>
+        </nav>
+        <div class="search-category">
+            <form action="admin_home.php" method="GET">
+                <select name="category" onchange="submit()">
+                    <option value="" selected disabled hidden>Categories</option>
+                    <option>All</option>
+                    <option>Travel</option>
+                    <option>Food</option>
+                    <option>Fitness</option>
+                </select>
+            </form>
+            <form action="admin_home.php" method="GET">
+                <input type="text" name="search" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+    <div class="blog-grid">
+        <?php
+        if (isset($_GET['category'])) {
+            $category = $_GET['category'];
+            switch ($category) {
+                case 'Travel':
+                    $query = "SELECT * FROM posts WHERE category = 'Travel' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'Fitness':
+                    $query = "SELECT * FROM posts WHERE category = 'Fitness' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'Food':
+                    $query = "SELECT * FROM posts WHERE category = 'Food' ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+                    break;
+                case 'All':
+                    $query = "SELECT * FROM posts ORDER BY id ASC";
+                    $result = mysqli_query($conn, $query);
+            }
+        }
+
+        if (isset($_GET['search'])) {
+            $search = addslashes($_GET['search']);
+            $query = "SELECT * FROM posts WHERE post_title LIKE '%$search%' OR post LIKE '%$search%' ORDER BY id ASC";
+            $result = mysqli_query($conn, $query);
+        }
+
+        foreach ($result as $user) {
+            include 'admin_post.php';
+        }
+        ?>
+        <!-- Repeat similar cards -->
+</body>
+
+</html>

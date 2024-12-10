@@ -10,7 +10,7 @@ $user_id = $user_data['user_id'];
 if (isset($_SERVER['HTTP_REFERER'])) {
     $return_to = $_SERVER['HTTP_REFERER'];
 } else {
-    $return_to = "blog_details.php?id=" . $post['post_id'];
+    $return_to = "admin_blog_details.php?id=" . $post['post_id'];
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->bind_param("iisi", $postId, $userId, $comment, $comment_id);
 
                 if ($stmt->execute()) {
-                    header("Location: blog_details.php?id=$postId"); // Redirect back to the post page
+                    header("Location: admin_blog_details.php?id=$postId"); // Redirect back to the post page
                     exit();
                 } else {
                     echo "Error: " . $stmt->error;

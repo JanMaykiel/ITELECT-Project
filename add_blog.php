@@ -24,41 +24,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $post_id = random_num(10);
 
         if ($error === 0) {
-            if ($img_size > 2 * 1024 * 1024) {
-                echo "File too large!";
-                header('Location: add_blog.php?error=file_too_large');
-                die;
-            } else {
-                $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
-                $img_ex_to_lc = strtolower($img_ex);
+            $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+            $img_ex_to_lc = strtolower($img_ex);
 
-                $allowed_exs = array("jpg", "jpeg", "png");
-                if (in_array($img_ex_to_lc, $allowed_exs)) {
-                    if ($error === 0) {
-                        if ($img_size < 2 * 1024 * 1024) {
-                            $new_img_name = uniqid($post_id, true) . '.' . $img_ex_to_lc;
-                            $img_upload_path = 'uploads/posts/' . $new_img_name;
-                            move_uploaded_file($temp_name, $img_upload_path);
-                            $query = "INSERT INTO posts (post_id, user_id, category, post_title, post, image) VALUES ('$post_id', '$user_id', '$category', '$title', '$description', '$new_img_name')";
-                            if (mysqli_query($conn, $query)) {
-                                header('Location: my_blog.php?success=1');
-                                die;
-                            } else {
-                                header('Location: add_blog.php?error=error_uploading');
-                                die;
-                            }
+            $allowed_exs = array("jpg", "jpeg", "png");
+            if (in_array($img_ex_to_lc, $allowed_exs)) {
+                if ($error === 0) {
+                    if ($img_size < 8 * 1024 * 1024) {
+                        $new_img_name = uniqid($post_id, true) . '.' . $img_ex_to_lc;
+                        $img_upload_path = 'uploads/posts/' . $new_img_name;
+                        move_uploaded_file($temp_name, $img_upload_path);
+                        $query = "INSERT INTO posts (post_id, user_id, category, post_title, post, image) VALUES ('$post_id', '$user_id', '$category', '$title', '$description', '$new_img_name')";
+                        if (mysqli_query($conn, $query)) {
+                            header('Location: my_blog.php?success=1');
+                            die;
                         } else {
-                            header('Location: add_blog.php?error=file_too_large');
+                            header('Location: add_blog.php?error=error_uploading');
                             die;
                         }
                     } else {
-                        header('Location: add_blog.php?error=error_uploading');
+                        header('Location: add_blog.php?error=file_too_large');
                         die;
                     }
                 } else {
-                    header('Location: add_blog.php?error=invalid_file_type');
+                    header('Location: add_blog.php?error=error_uploading');
                     die;
                 }
+            } else {
+                header('Location: add_blog.php?error=invalid_file_type');
+                die;
             }
         } else {
             echo "There was an error uploading your file.";

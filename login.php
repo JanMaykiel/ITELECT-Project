@@ -14,11 +14,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Read form the database
         $query = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
         $result = mysqli_query($conn, $query);
-
         if ($result) {
             $user_data = mysqli_fetch_assoc($result);
             if ($user_data['password'] === $password) {
                 $_SESSION['user_id'] = $user_data['user_id'];
+                if ($user_data['user_type'] === 'admin') {
+                    header('Location: admin_dashboard.php');
+                    die;
+                }
                 header('Location: index.php');
                 die;
             } else {

@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fetch comments for the post
-$query = "SELECT comments.comment, comments.created_at, users.firstname, users.lastname, users.profile_path
+$query = "SELECT comments.comment, comments.post_id, comments.created_at, comments.comment_id, users.firstname, users.lastname, users.profile_path
           FROM comments
           JOIN users ON comments.user_id = users.user_id
           WHERE comments.post_id = ?
@@ -78,7 +78,7 @@ $result = $stmt->get_result();
 <body>
     <header>
         <h1>Daily Thoughts</h1>
-        <a href="profile.php">
+        <a href="admin_profile.php">
             <h4>
                 <?php echo $user['firstname'] . ' ' . $user['lastname']; ?>
             </h4>
@@ -88,9 +88,10 @@ $result = $stmt->get_result();
     <div class="nav-and-search">
         <nav>
             <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="my_blog.php">My Blog</a></li>
-                <li><a href="profile.php">Profile</a></li>
+                <li><a href="admin_home.php">Posts</a></li>
+                <li><a href="admin_dashboard.php">Dashboard</a></li>
+                <li><a href="user_lists.php">User List</a></li>
+                <li><a href="admin_profile.php">Profile</a></li>
             </ul>
         </nav>
     </div>
@@ -126,7 +127,7 @@ $result = $stmt->get_result();
         </div>
 
         <!-- Comments Section -->
-        <form action="add_comment.php?id=<?= $post['post_id'] ?>" method="POST">
+        <form action="admin_comment.php?id=<?= $post['post_id'] ?>" method="POST">
             <div class="comments-section">
                 <h3>Comments:</h3>
                 <textarea name="comment" placeholder="Leave a comment..."></textarea>
@@ -138,7 +139,7 @@ $result = $stmt->get_result();
             <?php
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    include 'comments.php';
+                    include 'admin_delete_comments.php';
                 }
             } else {
                 echo "<p>No comments yet. Be the first to comment!</p>";

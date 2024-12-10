@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = md5($_POST['password']); // Hash the password
     $confirm_password = md5($_POST['confirm_password']); // Hash confirm password
 
-    $default_profile_pic = "uploads/default.png";
+    $default_profile_pic = "default.png";
 
     if (!empty($fname) && !empty($lname) && !empty($email) && !empty($password) && !empty($confirm_password) && !is_numeric($fname) && !is_numeric($lname)) {
         // All fields are filled save to database

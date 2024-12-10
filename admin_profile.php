@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($error === 0) {
             if ($img_size > 2 * 1024 * 1024) {
                 echo "File too large!";
-                header('Location: profile.php?error=file_too_large');
+                header('Location: admin_profile.php?error=file_too_large');
                 die;
             } else {
                 $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } else {
             echo "There was an error uploading your file.";
-            header('Location: profile.php?error=upload_error');
+            header('Location: admin_profile.php?error=upload_error');
         }
 
         // Update user details
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             unlink('uploads/' . $old_img);
         }
         if (mysqli_query($conn, $update_query)) {
-            header('Location: profile.php?success=1');
+            header('Location: admin_profile.php?success=1');
             die;
         } else {
             echo "Error updating profile.";
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($fname) && !empty($lname) && !empty($bio) && !is_numeric($fname) && !is_numeric($lname)) {
         $update_query = "UPDATE users SET firstname = '$fname', lastname = '$lname', bio = '$bio' WHERE user_id = '$user_id'";
         if (mysqli_query($conn, $update_query)) {
-            header('Location: profile.php?success=1');
+            header('Location: admin_profile.php?success=1');
             die;
         } else {
             echo "Error updating profile.";
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <header>
         <h1>Daily Thoughts</h1>
-        <a href="profile.php">
+        <a href="admin_profile.php">
             <h4><?php echo $user['firstname'] . ' ' . $user['lastname']; ?></h4>
             <img src="uploads/<?= $user['profile_path'] ?: 'uploads/default.png'; ?>">
         </a>
@@ -111,9 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="nav-and-search">
         <nav>
             <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="my_blog.php">My Blog</a></li>
-                <li><a href="profile.php" class="active">Profile</a></li>
+                <li><a href="admin_home.php">Posts</a></li>
+                <li><a href="admin_dashboard.php">Dashboard</a></li>
+                <li><a href="user_lists.php">User List</a></li>
+                <li><a href="admin_profile.php" class="active">Profile</a></li>
             </ul>
         </nav>
     </div>
@@ -135,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <h2>Edit Profile</h2>
-        <form action="profile.php" method="POST" enctype="multipart/form-data">
+        <form action="admin_profile.php" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="fname">First Name:</label>
                 <input type="text" id="fname" name="fname" value="<?php echo $user['firstname']; ?>" required>
