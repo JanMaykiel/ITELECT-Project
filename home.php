@@ -35,6 +35,8 @@ if ($result->num_rows > 0) {
         <nav>
             <ul>
                 <li><a href="index.php" class="active">Home</a></li>
+                <li><a href="my_blog.php">My Blog</a></li>
+                <li><a href="profile.php">Profile</a></li>
             </ul>
         </nav>
         <div class="search-category">
