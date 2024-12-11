@@ -5,6 +5,9 @@ include 'db.php';
 include 'functions.php';
 
 $user_data = check_login($conn);
+
+$user_id = $_SESSION['user_id'];
+
 //check if user is logged in
 if (!$user_data) {
     header('Location: home.php?=not_logged_in');
@@ -17,14 +20,13 @@ if ($user_data['user_type'] !== 'admin') {
 }
 
 // Fetch post details
-$query = "SELECT * FROM posts ORDER BY id ASC";
+$query = "SELECT * FROM posts WHERE user_id = '$user_id' ORDER BY id ASC";
 $result = mysqli_query($conn, $query);
 
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,32 +36,30 @@ if ($result->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Thoughts</title>
     <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/my_blog.css">
+    <link rel="stylesheet" href="css/delete.css">
 </head>
 
 <body>
     <header>
         <h1>Daily Thoughts</h1>
-
         <a href="admin_profile.php">
-            <h4>
-                <?php echo $user_data['firstname'] . ' ' . $user_data['lastname']; ?>
-            </h4>
+            <h4><?php echo $user_data['firstname'] . ' ' . $user_data['lastname']; ?></h4>
             <img src="uploads/<?= $user_data['profile_path'] ?: 'uploads/default.png'; ?>">
         </a>
     </header>
     <div class="nav-and-search">
         <nav>
             <ul>
-                <li><a href="admin_home.php" class="active">Posts</a></li>
-                <li><a href="admin_blog.php">My Blog</a></li>
+                <li><a href="admin_home.php">Posts</a></li>
+                <li><a href="admin_blog.php" class="active">My Blog</a></li>
                 <li><a href="admin_dashboard.php">Dashboard</a></li>
                 <li><a href="user_lists.php">User List</a></li>
                 <li><a href="admin_profile.php">Profile</a></li>
             </ul>
         </nav>
         <div class="search-category">
-            <form action="admin_home.php" method="GET">
+            <form action="admin_blog.php" method="GET">
                 <select name="category" onchange="submit()">
                     <option value="" selected disabled hidden>Categories</option>
                     <option>All</option>
@@ -68,45 +68,43 @@ if ($result->num_rows > 0) {
                     <option>Fitness</option>
                 </select>
             </form>
-            <form action="admin_home.php" method="GET">
-                <input type="text" name="search" placeholder="Search...">
-            </form>
         </div>
     </div>
+
+
     <div class="blog-grid">
         <?php
         if (isset($_GET['category'])) {
             $category = $_GET['category'];
             switch ($category) {
                 case 'Travel':
-                    $query = "SELECT * FROM posts WHERE category = 'Travel' ORDER BY id ASC";
+                    $query = "SELECT * FROM posts WHERE category = 'Travel' AND user_id = '$user_id' ORDER BY id ASC";
                     $result = mysqli_query($conn, $query);
                     break;
                 case 'Fitness':
-                    $query = "SELECT * FROM posts WHERE category = 'Fitness' ORDER BY id ASC";
+                    $query = "SELECT * FROM posts WHERE category = 'Fitness' AND user_id = '$user_id' ORDER BY id ASC";
                     $result = mysqli_query($conn, $query);
                     break;
                 case 'Food':
-                    $query = "SELECT * FROM posts WHERE category = 'Food' ORDER BY id ASC";
+                    $query = "SELECT * FROM posts WHERE category = 'Food' AND user_id = '$user_id' ORDER BY id ASC";
                     $result = mysqli_query($conn, $query);
                     break;
                 case 'All':
-                    $query = "SELECT * FROM posts ORDER BY id ASC";
+                    $query = "SELECT * FROM posts WHERE user_id = '$user_id' ORDER BY id ASC";
                     $result = mysqli_query($conn, $query);
             }
         }
+        ?>
+        <a href="admin_add_blog.php" class="blog-card add-post">
+            <div class="add-icon">+</div>
+        </a>
 
-        if (isset($_GET['search'])) {
-            $search = addslashes($_GET['search']);
-            $query = "SELECT * FROM posts WHERE post_title LIKE '%$search%' OR post LIKE '%$search%' ORDER BY id ASC";
-            $result = mysqli_query($conn, $query);
-        }
-
+        <?php
         foreach ($result as $user) {
-            include 'admin_post.php';
+            include 'user_post.php';
         }
         ?>
-        <!-- Repeat similar cards -->
+    </div>
 </body>
 
 </html>

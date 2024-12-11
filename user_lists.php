@@ -7,12 +7,12 @@ include 'functions.php';
 $user_data = check_login($conn);
 //check if user is logged in
 if (!$user_data) {
-    header('Location: home.php?=not_logged_in');
+    header('Location: login.php?=not_logged_in');
     die;
 }
 
 if ($user_data['user_type'] !== 'admin') {
-    header('Location: home.php?=not_admin');
+    header('Location: login.php?=not_admin');
     die;
 }
 
@@ -55,6 +55,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         <nav>
             <ul>
                 <li><a href="admin_home.php">Posts</a></li>
+                <li><a href="admin_blog.php">My Blog</a></li>
                 <li><a href="admin_dashboard.php">Dashboard</a></li>
                 <li><a href="user_lists.php" class="active">User List</a></li>
                 <li><a href="admin_profile.php">Profile</a></li>

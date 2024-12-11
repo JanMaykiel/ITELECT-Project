@@ -15,6 +15,11 @@ if (!$user_data) {
     die;
 }
 
+if ($user_data['user_type'] !== 'admin') {
+    header('Location: home.php?=not_admin');
+    die;
+}
+
 // Handle blog post
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -42,26 +47,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         move_uploaded_file($temp_name, $img_upload_path);
                         $query = "INSERT INTO posts (post_id, user_id, category, post_title, post, image) VALUES ('$post_id', '$user_id', '$category', '$title', '$description', '$new_img_name')";
                         if (mysqli_query($conn, $query)) {
-                            header('Location: my_blog.php?success=1');
+                            header('Location: admin_blog.php?success=1');
                             die;
                         } else {
-                            header('Location: add_blog.php?error=error_uploading');
+                            header('Location: admin_add_blog.php?error=error_uploading');
                             die;
                         }
                     } else {
-                        header('Location: add_blog.php?error=file_too_large');
+                        header('Location: admin_add_blog.php?error=file_too_large');
                         die;
                     }
                 } else {
-                    header('Location: add_blog.php?error=error_uploading');
+                    header('Location: admin_add_blog.php?error=error_uploading');
                     die;
                 }
             } else {
-                header('Location: add_blog.php?error=invalid_file_type');
+                header('Location: admin_add_blog.php?error=invalid_file_type');
                 die;
             }
         } else {
-            header('Location: add_blog.php?error=upload_error');
+            header('Location: admin_add_blog.php?error=upload_error');
             die;
         }
     }
@@ -83,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <header>
         <h1>Daily Thoughts</h1>
-        <a href="profile.php">
+        <a href="admin_profile.php">
             <h4><?php echo $user_data['firstname'] . ' ' . $user_data['lastname']; ?></h4>
             <img src="uploads/<?= $user_data['profile_path'] ?: 'uploads/default.png'; ?>">
         </a>
@@ -91,9 +96,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="nav-and-search">
         <nav>
             <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="my_blog.php" class="active">My Blog</a></li>
-                <li><a href="profile.php">Profile</a></li>
+                <li><a href="admin_home.php">Posts</a></li>
+                <li><a href="admin_blog.php" class="active">My Blog</a></li>
+                <li><a href="admin_dashboard.php">Dashboard</a></li>
+                <li><a href="user_lists.php">User List</a></li>
+                <li><a href="admin_profile.php">Profile</a></li>
             </ul>
         </nav>
         <div class="search-category">
@@ -120,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ?>
             </p>
         <?php endif; ?>
-        <form action="add_blog.php" method="POST" enctype="multipart/form-data">
+        <form action="admin_add_blog.php" method="POST" enctype="multipart/form-data">
             <div class="upload-container">
                 <label for="image">
                     <div class="upload-box">Upload an Image</div>
@@ -145,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <textarea id="description" name="description" placeholder="Add Blog Description" required></textarea>
             </div>
             <div class="button-group">
-                <a href="my_blog.php" class="cancel-button">Cancel</a>
+                <a href="admin_blog.php" class="cancel-button">Cancel</a>
                 <button type="submit" class="post-button">Post</button>
             </div>
         </form>

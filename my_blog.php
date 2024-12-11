@@ -8,6 +8,12 @@ $user_data = check_login($conn);
 
 $user_id = $_SESSION['user_id'];
 
+//check if user is logged in
+if (!$user_data) {
+    header('Location: home.php?=not_logged_in');
+    die;
+}
+
 // Fetch post details
 $query = "SELECT * FROM posts WHERE user_id = '$user_id' ORDER BY id ASC";
 $result = mysqli_query($conn, $query);

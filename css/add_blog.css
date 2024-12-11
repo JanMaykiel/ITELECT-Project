@@ -100,4 +100,5 @@ textarea {
 .post-button {
     background-color: #5d4037;
     color: white;
+    text-decoration: none;
 }

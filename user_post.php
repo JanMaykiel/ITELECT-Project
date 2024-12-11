@@ -1,5 +1,13 @@
+<?php
+if ($user_data['user_type'] !== 'admin') {
+    $redirect = 'blog_details.php?id=';
+} else {
+    $redirect = 'admin_blog_details.php?id=';
+}
+?>
+
 <div class="blog-card">
-    <a href="blog_details.php?id=<?php echo $user['post_id'] ?>" class="blog-details">
+    <a href="<?php echo $redirect . $user['post_id'] ?>" class="blog-details">
         <img src="uploads/posts/<?= $user['image'] ?>" alt=" ">
         <div class="content">
             <h2><?php echo $user['post_title'] ?></h2>

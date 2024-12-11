@@ -82,6 +82,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         <nav>
             <ul>
                 <li><a href="admin_home.php">Posts</a></li>
+                <li><a href="admin_blog.php">My Blog</a></li>
                 <li><a href="admin_dashboard.php" class="active">Dashboard</a></li>
                 <li><a href="user_lists.php">User List</a></li>
                 <li><a href="admin_profile.php">Profile</a></li>

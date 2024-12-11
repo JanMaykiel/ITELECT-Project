@@ -4,9 +4,20 @@ session_start();
 include 'db.php';
 include 'functions.php';
 
-check_login($conn);
+$user_data = check_login($conn);
 
 $user_id = $_SESSION['user_id'];
+
+//check if user is logged in
+if (!$user_data) {
+    header('Location: home.php?=not_logged_in');
+    die;
+}
+
+if ($user_data['user_type'] !== 'admin') {
+    header('Location: home.php?=not_admin');
+    die;
+}
 
 // Fetch user details
 $query = "SELECT * FROM users WHERE user_id = '$user_id' LIMIT 1";
@@ -112,6 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <nav>
             <ul>
                 <li><a href="admin_home.php">Posts</a></li>
+                <li><a href="admin_blog.php">My Blog</a></li>
                 <li><a href="admin_dashboard.php">Dashboard</a></li>
                 <li><a href="user_lists.php">User List</a></li>
                 <li><a href="admin_profile.php" class="active">Profile</a></li>

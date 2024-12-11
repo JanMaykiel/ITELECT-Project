@@ -1,8 +1,22 @@
 <?php
+session_start();
+
 include 'db.php';
 include 'functions.php';
 
 $user_data = check_login($conn);
+
+//check if user is logged in
+if (!$user_data) {
+    header('Location: home.php?=not_logged_in');
+    die;
+}
+
+if ($user_data['user_type'] !== 'admin') {
+    $redirect = "my_blog.php";
+} else {
+    $redirect = "admin_blog.php";
+}
 
 //Get the user id
 $user_id = $_SESSION['user_id'];
@@ -34,13 +48,13 @@ $query = "DELETE FROM posts WHERE post_id = '$postId' LIMIT 1";
 if (mysqli_query($conn, $query)) {
     $query = "DELETE FROM likes WHERE post_id = '$postId' LIMIT 1";
     if (mysqli_query($conn, $query)) {
-        header('Location: my_blog.php?success=1');
+        header('Location: ' . $redirect . '?success=1');
     } else {
-        header('Location: my_blog.php?error=error_deleting');
+        header('Location: ' . $redirect . '?error=error_deleting');
         die;
     }
 } else {
-    header('Location: my_blog.php?error=error_deleting');
+    header('Location: ' . $redirect . '?error=error_deleting');
     die;
 }
 ?>
