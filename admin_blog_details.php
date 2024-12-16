@@ -89,7 +89,7 @@ $result = $stmt->get_result();
         <nav>
             <ul>
                 <li><a href="admin_home.php">Posts</a></li>
-                <li><a href="admin_blog.php" class="active">My Blog</a></li>
+                <li><a href="admin_blog.php">My Blog</a></li>
                 <li><a href="admin_dashboard.php">Dashboard</a></li>
                 <li><a href="user_lists.php">User List</a></li>
                 <li><a href="admin_profile.php">Profile</a></li>

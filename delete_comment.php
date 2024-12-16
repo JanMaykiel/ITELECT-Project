@@ -21,6 +21,10 @@ if (isset($_GET['id']) && isset($_GET['blog']) && !empty($_GET['id']) && !empty(
     $stmt->bind_param("ii", $commentId, $postId);
 
     if ($stmt->execute()) {
+        $query = "UPDATE posts SET comments = comments - 1 WHERE post_id = $postId LIMIT 1";
+        $add = $conn->prepare($query);
+        $add->execute();
+
         header("Location: admin_blog_details.php?id=$postId&success=1");
         exit();
     } else {

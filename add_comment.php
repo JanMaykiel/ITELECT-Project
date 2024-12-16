@@ -29,6 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->bind_param("iisi", $postId, $userId, $comment, $comment_id);
 
                 if ($stmt->execute()) {
+                    $query = "UPDATE posts SET comments = comments + 1 WHERE post_id = $postId LIMIT 1";
+                    $add = $conn->prepare($query);
+                    $add->execute();
+
                     header("Location: blog_details.php?id=$postId"); // Redirect back to the post page
                     exit();
                 } else {

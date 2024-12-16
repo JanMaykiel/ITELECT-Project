@@ -4,7 +4,13 @@ session_start();
 include 'db.php';
 include 'functions.php';
 
-check_login($conn);
+$user_data = check_login($conn);
+//check if user is logged in
+if (!$user_data) {
+    header('Location: home.php?=not_logged_in');
+    die;
+}
+
 
 $user_id = $_SESSION['user_id'];
 
